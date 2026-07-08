@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Cake! 🎂 Sparkles & Candle Blowing</title>
+  <meta name="description" content="Make a wish! Blow out the candles with your microphone or tap, customize the cake flavor, play birthday music, and share a custom greeting.">
+  
+  <!-- SEO & OpenGraph tags -->
+  <meta property="og:title" content="Make a Wish! Interactive Birthday Cake 🎂">
+  <meta property="og:description" content="Customize a birthday cake, blow out candles with your mic, and celebrate!">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <script type="module" crossorigin src="/assets/index-CcXGqI2L.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BniOYUpC.css">
+</head>
+<body class="theme-default">
+  
+  <!-- Floating background particles -->
+  <div class="bg-particles" id="bgParticles"></div>
+
+  <!-- Main Canvas for Confetti and Fireworks -->
+  <canvas id="celebrationCanvas"></canvas>
+
+  <!-- WELCOME CONFIGURATION MODAL -->
+  <div class="modal-overlay" id="welcomeModal">
+    <div class="modal-content glassmorphism animate-pop">
+      <h2>Create Birthday Magic ✨</h2>
+      <p class="modal-subtitle">Configure your interactive birthday surprise</p>
+      
+      <form id="cakeConfigForm">
+        <div class="form-group">
+          <label for="inputName">Birthday Person's Name</label>
+          <input type="text" id="inputName" placeholder="Enter name..." required autocomplete="off">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputAge">Age (Candles)</label>
+            <input type="number" id="inputAge" min="1" max="99" value="1" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="inputFlavor">Cake Flavor</label>
+            <select id="inputFlavor">
+              <option value="strawberry">Strawberry Pink 🍓</option>
+              <option value="chocolate">Chocolate Dream 🍫</option>
+              <option value="vanilla">Vanilla Buttercream 🍦</option>
+              <option value="matcha">Matcha Pistachio 🍵</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="startPartyBtn" class="btn-primary ripple">
+          Generate Birthday Cake 🎂
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APP WORKSPACE -->
+  <main class="app-container" id="appContainer" style="display: none;">
+    <!-- Top Bar with Music Toggle and Name Header -->
+    <header class="app-header">
+      <div class="header-titles">
+        <h1 class="sparkle-text">Happy Birthday, <span id="headerName">Name</span>!</h1>
+        <p class="subtitle" id="headerSubtitle">Blow out the candles to make a wish!</p>
+      </div>
+    </header>
+
+    <!-- The Cake Stage -->
+    <div class="stage-container">
+      <div class="cake-stage">
+        <!-- Floating Balloons Container -->
+        <div class="balloons-container" id="balloonsContainer"></div>
+
+        <!-- The Plate & Cake -->
+        <div class="cake-plate"></div>
+        <div class="cake-assembly" id="cakeAssembly">
+          <!-- Sparkler/Toppings will render here -->
+          <div class="toppings-layer" id="toppingsLayer"></div>
+          
+          <!-- Cake Tiers (rendered dynamically or fixed for CSS styling) -->
+          <!-- Tier 3 (Top) -->
+          <div class="cake-tier tier-top" id="tierTop">
+            <div class="tier-frosting"></div>
+            <div class="tier-dripping"></div>
+            <div class="tier-inner"></div>
+            <!-- Candles get attached here -->
+            <div class="candle-stand" id="candleStand"></div>
+          </div>
+          <!-- Tier 2 (Middle) -->
+          <div class="cake-tier tier-middle" id="tierMiddle">
+            <div class="tier-frosting"></div>
+            <div class="tier-dripping"></div>
+            <div class="tier-inner"></div>
+          </div>
+          <!-- Tier 1 (Bottom) -->
+          <div class="cake-tier tier-bottom" id="tierBottom">
+            <div class="tier-frosting"></div>
+            <div class="tier-dripping"></div>
+            <div class="tier-inner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blowing Controls / Visualizers -->
+    <section class="controls-panel glassmorphism">
+      <div class="control-row">
+        <!-- Blowing Mode Toggles -->
+        <div class="control-group">
+          <label>Blowing Method</label>
+          <div class="segmented-control">
+            <button id="btnModeTap" class="btn-segment active">Tap to Blow</button>
+            <button id="btnModeMic" class="btn-segment">Use Mic 🎙️</button>
+          </div>
+        </div>
+
+        <!-- Cake Customization -->
+        <div class="control-group">
+          <label for="flavorSelect">Flavor</label>
+          <select id="flavorSelect" class="form-select-sm">
+            <option value="strawberry">Strawberry 🍓</option>
+            <option value="chocolate">Chocolate 🍫</option>
+            <option value="vanilla">Vanilla 🍦</option>
+            <option value="matcha">Matcha 🍵</option>
+          </select>
+        </div>
+
+        <!-- Sprinkle Toggle -->
+        <div class="control-group">
+          <label>Sprinkles</label>
+          <button id="btnSprinkles" class="btn-toggle active">On</button>
+        </div>
+
+        <!-- Music Control -->
+        <div class="control-group">
+          <label>Music</label>
+          <button id="btnMusic" class="btn-toggle">Play 🎵</button>
+        </div>
+      </div>
+
+      <!-- Mic Input Level Indicator (Hidden when Tap mode is active) -->
+      <div class="mic-meter-container" id="micMeterContainer" style="display: none;">
+        <div class="mic-label">
+          <span>Blow into mic:</span>
+          <span id="micStatus">Off</span>
+        </div>
+        <div class="mic-bar-bg">
+          <div class="mic-bar-fill" id="micBarFill"></div>
+        </div>
+        <span class="mic-hint">Make a soft sustained blowing sound at your mic!</span>
+      </div>
+
+      <!-- Bottom actions -->
+      <div class="action-buttons">
+        <button id="btnShare" class="btn-secondary">
+          <span class="icon">🔗</span> Copy Share Link
+        </button>
+        <button id="btnReset" class="btn-secondary">
+          <span class="icon">🔄</span> Create New Cake
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- BIRTHDAY GREETING CARD (Pops up when candles are blown out) -->
+  <div class="modal-overlay" id="cardModal" style="display: none;">
+    <div class="birthday-card glassmorphism-card animate-scale-up">
+      <div class="card-ribbon"></div>
+      <div class="card-inside">
+        <h2 class="card-title">Make a Wish! 🕯️✨</h2>
+        <div class="card-message">
+          <p class="greeting-text">Dear <span id="cardName">Friend</span>,</p>
+          <p class="wishes-text">May your birthday be filled with endless laughter, joy, and wonderful moments. You are officially <strong id="cardAge">1</strong> years awesome! 🥳</p>
+          <p class="wishes-sub">Blow out any remaining candles (if any) or simply enjoy the celebration!</p>
+        </div>
+        
+        <div class="card-footer">
+          <button id="btnCloseCard" class="btn-primary">Keep Celebrating! 🎈</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast for Link Copying, etc. -->
+  <div id="toastNotification" class="toast">Link copied to clipboard! 🎂</div>
+
+  <!-- App Logic Javascript -->
+</body>
+</html>
