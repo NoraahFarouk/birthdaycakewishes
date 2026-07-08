@@ -1,0 +1,23 @@
+{
+  "name": "happy-birthday-cake",
+  "version": "1.0.0",
+  "description": "An interactive animated birthday cake website with microphone candle blowing, audio synth, and canvas particles.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "birthday",
+    "cake",
+    "candles",
+    "interactive",
+    "web-audio-api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
